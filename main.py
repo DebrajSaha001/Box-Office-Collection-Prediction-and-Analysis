@@ -399,53 +399,59 @@ joblib.dump({
 print("\n  Models saved to models/ folder ✓")
 
 # ─────────────────────────────────────────────
-#  STEP 9 — VISUALISATIONS
+#  STEP 9 — VIZUALISATIONS
 # ─────────────────────────────────────────────
 
 print("\n[7/7] Generating charts...")
 
-fig, axes = plt.subplots(1, 3, figsize=(18, 5))
-fig.suptitle("Box Office Predictor — Model Results", fontsize=14, fontweight="bold")
-
-# Chart 1 — Actual vs Predicted
-ax1 = axes[0]
 actual_cr    = np.expm1(Y_test_reg.values)
 predicted_cr = np.expm1(Y_pred_reg)
-ax1.scatter(actual_cr, predicted_cr, alpha=0.5, color="#7F77DD", s=30)
+
+# ── Chart 1 — Actual vs Predicted ────────────────────────────
+fig1, ax1 = plt.subplots(figsize=(7, 6))
+ax1.scatter(actual_cr, predicted_cr, alpha=0.5, color="#7F77DD", s=40)
 lim = max(actual_cr.max(), predicted_cr.max())
 ax1.plot([0, lim], [0, lim], "r--", linewidth=1.5, label="Perfect Prediction")
-ax1.set_xlabel("Actual Worldwide (Cr)")
-ax1.set_ylabel("Predicted Worldwide (Cr)")
-ax1.set_title(f"Actual vs Predicted\nR² = {r2:.3f}")
+ax1.set_xlabel("Actual Worldwide (Cr)", fontsize=12)
+ax1.set_ylabel("Predicted Worldwide (Cr)", fontsize=12)
+ax1.set_title(f"Actual vs Predicted Worldwide\nR² = {r2:.3f}", fontsize=13, fontweight="bold")
 ax1.legend()
+fig1.tight_layout()
+fig1.savefig("models/chart1_actual_vs_predicted.png", dpi=150, bbox_inches="tight")
+plt.show()
+print("  ✓ Chart 1 saved → models/chart1_actual_vs_predicted.png")
 
-# Chart 2 — Confusion Matrix
-ax2 = axes[1]
+# ── Chart 2 — Confusion Matrix ────────────────────────────────
 cm = confusion_matrix(Y_clf_test, Y_pred_clf)
+fig2, ax2 = plt.subplots(figsize=(8, 6))
 sns.heatmap(
     cm, annot=True, fmt="d", ax=ax2,
     xticklabels=label_encoder.classes_,
     yticklabels=label_encoder.classes_,
     cmap="Purples"
 )
-ax2.set_title(f"Confusion Matrix\nAccuracy = {acc:.3f}")
-ax2.set_xlabel("Predicted")
-ax2.set_ylabel("Actual")
-plt.setp(ax2.get_xticklabels(), rotation=30, ha="right", fontsize=8)
-plt.setp(ax2.get_yticklabels(), rotation=0, fontsize=8)
+ax2.set_title(f"Confusion Matrix\nAccuracy = {acc:.3f}", fontsize=13, fontweight="bold")
+ax2.set_xlabel("Predicted", fontsize=12)
+ax2.set_ylabel("Actual", fontsize=12)
+plt.setp(ax2.get_xticklabels(), rotation=30, ha="right", fontsize=9)
+plt.setp(ax2.get_yticklabels(), rotation=0, fontsize=9)
+fig2.tight_layout()
+fig2.savefig("models/chart2_confusion_matrix.png", dpi=150, bbox_inches="tight")
+plt.show()
+print("  ✓ Chart 2 saved → models/chart2_confusion_matrix.png")
 
-# Chart 3 — Feature Importance
-ax3 = axes[2]
+# ── Chart 3 — Feature Importance ─────────────────────────────
 importance = pd.Series(regressor.feature_importances_, index=FEATURES_FULL).sort_values()
 colors = ["#7F77DD" if i >= len(importance) - 3 else "#B4B2A9" for i in range(len(importance))]
+fig3, ax3 = plt.subplots(figsize=(8, 6))
 importance.plot(kind="barh", ax=ax3, color=colors)
-ax3.set_title("Feature Importance\n(Top 3 highlighted)")
-ax3.set_xlabel("Importance Score")
-
-plt.tight_layout()
-plt.savefig("models/results.png", dpi=150, bbox_inches="tight")
+ax3.set_title("Feature Importance\n(Top 3 highlighted in purple)", fontsize=13, fontweight="bold")
+ax3.set_xlabel("Importance Score", fontsize=12)
+ax3.set_ylabel("Features", fontsize=12)
+fig3.tight_layout()
+fig3.savefig("models/chart3_feature_importance.png", dpi=150, bbox_inches="tight")
 plt.show()
-print("  Chart saved to models/results.png ✓")
+print("  ✓ Chart 3 saved → models/chart3_feature_importance.png")
 
 # ─────────────────────────────────────────────
 #  STEP 10 — HELPER: VERDICT FROM PROFIT %
