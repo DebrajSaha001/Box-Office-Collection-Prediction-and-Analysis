@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "annot",
+        "apikey",
         "barplot",
         "bytree",
         "cmap",
@@ -10,8 +11,12 @@
         "Financials",
         "fontsize",
         "fontweight",
+        "imdb",
         "importances",
         "mlogloss",
+        "OMDB",
+        "omdbapi",
+        "Pathaan",
         "Rohit",
         "Salman",
         "scatterplot",
